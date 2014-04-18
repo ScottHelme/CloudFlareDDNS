@@ -17,7 +17,7 @@ $myDomain     = "example.com";                              // Your domain name.
 $ddnsAddress  = "ddns.example.com";                         // The subdomain you will be updating.
 $emailAddress = "CloudFlareAccountEmailAddress";            // The email address of your CloudFlare account.
 
-//These values do not need to be changed.
+// These values do not need to be changed.
 $ip           = $_SERVER['REMOTE_ADDR'];                    // The IP of the client calling the script.
 $id           = 0;                                          // The CloudFlare ID of the subdomain, used later.
 $url          = 'https://www.cloudflare.com/api_json.html'; // The URL for the CloudFlare API.
