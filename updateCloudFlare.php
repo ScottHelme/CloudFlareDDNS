@@ -57,7 +57,7 @@ foreach($data->response->recs->objs as $rec){
 // https://www.cloudflare.com/docs/client-api.html#s5.2
 $fields = array(
 	'a' => urlencode('rec_edit'),
-  'tkn' => urlencode($apiKey),
+        'tkn' => urlencode($apiKey),
 	'id' => urlencode($id),
 	'email' => urlencode($emailAddress),
 	'z' => urlencode($myDomain),
