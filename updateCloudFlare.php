@@ -6,14 +6,18 @@ Site: https://scotthelme.co.uk
 License: CC BY-SA 4.0
 */
 
-// Check the calling client has our auth key.
-if(empty($_GET['auth']) || ($_GET['auth'] != "***Generate Random Key Here***")) die;
+// Check the calling client has our auth key. Insert your own random key here.
+// Use this link to generate a key: http://scotthel.me/v1n0
+// Key example: Kqt9TH4qBEOfNSGWfPM0
+if(empty($_GET['auth']) || ($_GET['auth'] != "***Insert Random Key Here***")) die;
 
-
+// Update these values with your own information.
 $apiKey       = "CloudFlareApiKey";                         // Your CloudFlare API Key.
 $myDomain     = "example.com";                              // Your domain name.
 $ddnsAddress  = "ddns.example.com";                         // The subdomain you will be updating.
 $emailAddress = "CloudFlareAccountEmailAddress";            // The email address of your CloudFlare account.
+
+//These values do not need to be changed.
 $ip           = $_SERVER['REMOTE_ADDR'];                    // The IP of the client calling the script.
 $id           = 0;                                          // The CloudFlare ID of the subdomain, used later.
 $url          = 'https://www.cloudflare.com/api_json.html'; // The URL for the CloudFlare API.
@@ -22,7 +26,7 @@ $url          = 'https://www.cloudflare.com/api_json.html'; // The URL for the C
 // https://www.cloudflare.com/docs/client-api.html#s3.3
 $fields = array(
 	'a' => urlencode('rec_load_all'),
-  'tkn' => urlencode($apiKey),
+        'tkn' => urlencode($apiKey),
 	'email' => urlencode($emailAddress),
 	'z' => urlencode($myDomain)
 );
