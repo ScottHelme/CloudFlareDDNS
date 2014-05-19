@@ -21,7 +21,7 @@ $emailAddress = "CloudFlareAccountEmailAddress";            // The email address
 $ip           = $_SERVER['REMOTE_ADDR'];                    // The IP of the client calling the script.
 $id           = 0;                                          // The CloudFlare ID of the subdomain, used later.
 $url          = 'https://www.cloudflare.com/api_json.html'; // The URL for the CloudFlare API.
-
+$cfIP	      = '';				            // The IP Cloudflare has for the subdomain.
 // Build the initial request to fetch the record ID.
 // https://www.cloudflare.com/docs/client-api.html#s3.3
 $fields = array(
@@ -49,34 +49,39 @@ $data = json_decode($result);
 foreach($data->response->recs->objs as $rec){
 	if($rec->name == $ddnsAddress){
 		$id = $rec->rec_id;
+		$cfIP = $rec->content;
 		break;
 	}
 }
 
-// Build the request to update the DNS record with our new IP.
-// https://www.cloudflare.com/docs/client-api.html#s5.2
-$fields = array(
-	'a' => urlencode('rec_edit'),
-        'tkn' => urlencode($apiKey),
-	'id' => urlencode($id),
-	'email' => urlencode($emailAddress),
-	'z' => urlencode($myDomain),
-	'type' => urlencode('A'),
-	'name' => urlencode($ddnsAddress),
-	'content' => urlencode($ip),
-	'service_mode' => urlencode('0'),
-	'ttl' => urlencode ('1')
-);
-
-$fields_string="";
-foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-rtrim($fields_string, '&');
-
-// Send the request to the CloudFlare API.
-$ch = curl_init();
-curl_setopt($ch,CURLOPT_URL, $url);
-curl_setopt($ch,CURLOPT_POST, count($fields));
-curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-$result = curl_exec($ch);
-curl_close($ch);
+// Check if the IP Cloudflare has does not match the one you are trying to update it
+// with just to save an extra request.
+if ($ip != $cfIP)
+{
+	// Build the request to update the DNS record with our new IP.
+	// https://www.cloudflare.com/docs/client-api.html#s5.2
+	$fields = array(
+		'a' => urlencode('rec_edit'),
+	        'tkn' => urlencode($apiKey),
+		'id' => urlencode($id),
+		'email' => urlencode($emailAddress),
+		'z' => urlencode($myDomain),
+		'type' => urlencode('A'),
+		'name' => urlencode($ddnsAddress),
+		'content' => urlencode($ip),
+		'service_mode' => urlencode('0'),
+		'ttl' => urlencode ('1')
+	);
+	
+	$fields_string="";
+	foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+	rtrim($fields_string, '&');
+	
+	// Send the request to the CloudFlare API.
+	$ch = curl_init();
+	curl_setopt($ch,CURLOPT_URL, $url);
+	curl_setopt($ch,CURLOPT_POST, count($fields));
+	curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+	$result = curl_exec($ch);
+	curl_close($ch);
