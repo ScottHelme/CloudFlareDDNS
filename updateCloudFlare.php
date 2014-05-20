@@ -21,7 +21,8 @@ $emailAddress = "CloudFlareAccountEmailAddress";            // The email address
 $ip           = $_SERVER['REMOTE_ADDR'];                    // The IP of the client calling the script.
 $id           = 0;                                          // The CloudFlare ID of the subdomain, used later.
 $url          = 'https://www.cloudflare.com/api_json.html'; // The URL for the CloudFlare API.
-$cfIP	      = '';				            // The IP Cloudflare has for the subdomain.
+$cfIP	      = '';					    // The IP Cloudflare has for the subdomain.
+
 // Build the initial request to fetch the record ID.
 // https://www.cloudflare.com/docs/client-api.html#s3.3
 $fields = array(
@@ -54,10 +55,8 @@ foreach($data->response->recs->objs as $rec){
 	}
 }
 
-// Check if the IP Cloudflare has does not match the one you are trying to update it
-// with just to save an extra request.
-if ($ip != $cfIP)
-{
+// Only update the entry if the IP addresses do not match.
+if ($ip != $cfIP){
 	// Build the request to update the DNS record with our new IP.
 	// https://www.cloudflare.com/docs/client-api.html#s5.2
 	$fields = array(
@@ -85,3 +84,4 @@ if ($ip != $cfIP)
 	curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
 	$result = curl_exec($ch);
 	curl_close($ch);
+}
