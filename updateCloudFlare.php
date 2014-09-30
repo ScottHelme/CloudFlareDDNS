@@ -8,12 +8,12 @@ License: CC BY-SA 4.0
 
 // Use this link to generate keys: http://scotthel.me/v1n0
 // Key example: Kqt9TH4qBEOfNSGWfPM0
-// Insert the appropriate "key" => "hostname" values below
+// Insert the appropriate "key" => "subdomain" values below
 $hosts = array(
-	"***Insert Random Key1 Here***" => "ddns1",
-	"***Insert Random Key2 Here***" => "ddns2",
-	"***Insert Random Key3 Here***" => "ddns3",
-	"***Insert Random Keyn Here***" => "ddnsn"
+	"***Insert Random Key1 Here***" => "subdomain1",
+	"***Insert Random Key2 Here***" => "subdomain2",
+	"***Insert Random Key3 Here***" => "subdomain3",
+	"***Insert Random KeyX Here***" => "subdomainX"
 );
 
 // Check the calling client has a valid auth key.
