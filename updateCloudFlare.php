@@ -13,25 +13,25 @@ $hosts = array(
 if(empty($_GET['auth']) || (!array_key_exists($_GET['auth'], $hosts))) die;
 
 // Update these values with your own information.
-$apiKey       = "CloudFlareApiKey";                         // Your CloudFlare API Key.
-$myDomain     = "example.com";                              // Your domain name.
-$emailAddress = "CloudFlareAccountEmailAddress";            // The email address of your CloudFlare account.
+$apiKey		= "CloudFlareApiKey";				// Your CloudFlare API Key.
+$myDomain	= "example.com";				// Your domain name.
+$emailAddress	= "CloudFlareAccountEmailAddress";		// The email address of your CloudFlare account.
 
 // These values do not need to be changed.
-$ddnsAddress  = $hosts[$_GET['auth']].".".$myDomain;        // The subdomain that will be updated.
-$ip           = $_SERVER['REMOTE_ADDR'];                    // The IP of the client calling the script.
-$id           = 0;                                          // The CloudFlare ID of the subdomain, used later.
-$url          = 'https://www.cloudflare.com/api_json.html'; // The URL for the CloudFlare API.
-$cfIP	      = '';					    // The IP Cloudflare has for the subdomain.
+$ddnsAddress	= $hosts[$_GET['auth']].".".$myDomain;		// The subdomain that will be updated.
+$ip		= $_SERVER['REMOTE_ADDR'];			// The IP of the client calling the script.
+$id		= 0;						// The CloudFlare ID of the subdomain, used later.
+$url		= 'https://www.cloudflare.com/api_json.html';	// The URL for the CloudFlare API.
+$cfIP		= '';						// The IP Cloudflare has for the subdomain.
 
 // Sends request to CloudFlare and returns the response
 function send_request() {
 	global $url, $fields;
-	
+
 	$fields_string="";
 	foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
 	rtrim($fields_string, '&');
-	
+
 	// Send the request to the CloudFlare API.
 	$ch = curl_init();
 	curl_setopt($ch,CURLOPT_URL, $url);
@@ -40,7 +40,7 @@ function send_request() {
 	curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
 	$result = curl_exec($ch);
 	curl_close($ch);
-	
+
 	return $result;
 }
 
@@ -78,7 +78,7 @@ if ($ip != $cfIP){
 	// https://www.cloudflare.com/docs/client-api.html#s5.2
 	$fields = array(
 		'a' => urlencode('rec_edit'),
-	        'tkn' => urlencode($apiKey),
+		'tkn' => urlencode($apiKey),
 		'id' => urlencode($id),
 		'email' => urlencode($emailAddress),
 		'z' => urlencode($myDomain),
@@ -88,6 +88,6 @@ if ($ip != $cfIP){
 		'service_mode' => urlencode('0'),
 		'ttl' => urlencode ('1')
 	);
-	
+
 	$result = send_request();
 }
