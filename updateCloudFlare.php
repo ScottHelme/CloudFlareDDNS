@@ -31,6 +31,13 @@ $id           = 0;                                          // The CloudFlare ID
 $url          = 'https://www.cloudflare.com/api_json.html'; // The URL for the CloudFlare API.
 $cfIP	      = '';					    // The IP Cloudflare has for the subdomain.
 
+// Determine protocol version and set record type.
+if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)){
+	$type = 'AAAA';
+} else{
+	$type = 'A';
+}
+
 // Build the initial request to fetch the record ID.
 // https://www.cloudflare.com/docs/client-api.html#s3.3
 $fields = array(
@@ -56,7 +63,7 @@ curl_close($ch);
 // Extract the record ID for the subdomain we want to update.
 $data = json_decode($result);
 foreach($data->response->recs->objs as $rec){
-	if($rec->name == $ddnsAddress){
+	if(($rec->name == $ddnsAddress) && ($rec->type == $type)){
 		$id = $rec->rec_id;
 		$cfIP = $rec->content;
 		break;
@@ -73,7 +80,7 @@ if ($ip != $cfIP){
 		'id' => urlencode($id),
 		'email' => urlencode($emailAddress),
 		'z' => urlencode($myDomain),
-		'type' => urlencode('A'),
+		'type' => urlencode($type),
 		'name' => urlencode($ddnsAddress),
 		'content' => urlencode($ip),
 		'service_mode' => urlencode('0'),
