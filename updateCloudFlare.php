@@ -24,6 +24,26 @@ $id           = 0;                                          // The CloudFlare ID
 $url          = 'https://www.cloudflare.com/api_json.html'; // The URL for the CloudFlare API.
 $cfIP	      = '';					    // The IP Cloudflare has for the subdomain.
 
+// Sends request to CloudFlare and returns the response
+function send_request() {
+	global $url, $fields;
+	
+	$fields_string="";
+	foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+	rtrim($fields_string, '&');
+	
+	// Send the request to the CloudFlare API.
+	$ch = curl_init();
+	curl_setopt($ch,CURLOPT_URL, $url);
+	curl_setopt($ch,CURLOPT_POST, count($fields));
+	curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+	$result = curl_exec($ch);
+	curl_close($ch);
+	
+	return $result;
+}
+
 // Determine protocol version and set record type.
 if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)){
 	$type = 'AAAA';
@@ -35,23 +55,12 @@ if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)){
 // https://www.cloudflare.com/docs/client-api.html#s3.3
 $fields = array(
 	'a' => urlencode('rec_load_all'),
-        'tkn' => urlencode($apiKey),
+	'tkn' => urlencode($apiKey),
 	'email' => urlencode($emailAddress),
 	'z' => urlencode($myDomain)
 );
 
-$fields_string="";
-foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-rtrim($fields_string, '&');
-
-// Send the request to the CloudFlare API.
-$ch = curl_init();
-curl_setopt($ch,CURLOPT_URL, $url);
-curl_setopt($ch,CURLOPT_POST, count($fields));
-curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-$result = curl_exec($ch);
-curl_close($ch);
+$result = send_request();
 
 // Extract the record ID for the subdomain we want to update.
 $data = json_decode($result);
@@ -80,16 +89,5 @@ if ($ip != $cfIP){
 		'ttl' => urlencode ('1')
 	);
 	
-	$fields_string="";
-	foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-	rtrim($fields_string, '&');
-	
-	// Send the request to the CloudFlare API.
-	$ch = curl_init();
-	curl_setopt($ch,CURLOPT_URL, $url);
-	curl_setopt($ch,CURLOPT_POST, count($fields));
-	curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-	$result = curl_exec($ch);
-	curl_close($ch);
+	$result = send_request();
 }
