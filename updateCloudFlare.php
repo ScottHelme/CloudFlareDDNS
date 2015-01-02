@@ -1,13 +1,6 @@
 <?php
 
-/*
-Author: Scott Helme
-Site: https://scotthelme.co.uk
-License: CC BY-SA 4.0
-*/
-
-// Use this link to generate keys: http://scotthel.me/v1n0
-// Key example: Kqt9TH4qBEOfNSGWfPM0
+// A key can be any alphanumeric string
 // Insert the appropriate "key" => "hostname" values below
 $hosts = array(
 	"***Insert Random Key1 Here***" => "ddns1",
