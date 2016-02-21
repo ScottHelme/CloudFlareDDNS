@@ -3,7 +3,6 @@
 /*
 Author: Scott Helme
 Site: https://scotthelme.co.uk
-License: CC BY-SA 4.0
 */
 
 // Use this link to generate keys: http://scotthel.me/v1n0
