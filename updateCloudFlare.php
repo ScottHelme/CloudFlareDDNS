@@ -5,7 +5,7 @@ Author: Scott Helme
 Site: https://scotthelme.co.uk
 */
 
-// Use this link to generate keys: http://scotthel.me/v1n0
+// Use this link to generate keys: https://scotthel.me/v1n0
 // Key example: Kqt9TH4qBEOfNSGWfPM0
 // Insert the appropriate "key" => "subdomain" values below
 $hosts = array(
