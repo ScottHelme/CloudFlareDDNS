@@ -28,7 +28,7 @@ if (empty($hosts[$_GET['auth']]))
     $ddnsAddress  = $myDomain;                              // If no subdomain is given, update the domain itself.
 else
     $ddnsAddress  = $hosts[$_GET['auth']].".".$myDomain;    // The subdomain that will be updated.
-$ip           = $_SERVER['REMOTE_ADDR'];                    // The IP of the client calling the script.
+$ip           = exec('dig +short myip.opendns.com @resolver1.opendns.com'); // The External IP Address.
 $id           = 0;                                          // The CloudFlare ID of the subdomain, used later.
 $url          = 'https://www.cloudflare.com/api_json.html'; // The URL for the CloudFlare API.
 $cfIP	      = '';					    // The IP Cloudflare has for the subdomain.
