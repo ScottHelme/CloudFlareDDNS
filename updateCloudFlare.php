@@ -34,6 +34,7 @@ else
     $ddnsAddress  = $hosts[$_GET['auth']].".".$myDomain;    // The subdomain that will be updated.
 
 $ip           = $_SERVER['REMOTE_ADDR'];                    // The IP of the client calling the script.
+//$ip         = $_SERVER['HTTP_CF_CONNECTING_IP'];          // Replace the above line with this one if the DDNS server is behind Cloudflare
 $baseUrl      = 'https://api.cloudflare.com/client/v4/';    // The URL for the CloudFlare API.
 
 // Array with the headers needed for every request
