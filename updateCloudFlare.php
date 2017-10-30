@@ -16,9 +16,9 @@ $hosts = array(
 );
 
 // Check the calling client has a valid auth key.
-if (empty($_GET['auth'])) {
+if (empty($_POST['auth'])) {
 	die("Authentication required\n");
-} elseif (!array_key_exists($_GET['auth'], $hosts)) {
+} elseif (!array_key_exists($_POST['auth'], $hosts)) {
 	die("Invalid auth key\n");
 }
 
@@ -28,10 +28,10 @@ $myDomain     = "example.com";                              // Your domain name.
 $emailAddress = "CloudFlareAccountEmailAddress";            // The email address of your CloudFlare account.
 
 // These values do not need to be changed.
-if (empty($hosts[$_GET['auth']]))
+if (empty($hosts[$_POST['auth']]))
     $ddnsAddress  = $myDomain;                              // If no subdomain is given, update the domain itself.
 else
-    $ddnsAddress  = $hosts[$_GET['auth']].".".$myDomain;    // The subdomain that will be updated.
+    $ddnsAddress  = $hosts[$_POST['auth']].".".$myDomain;   // The subdomain that will be updated.
 
 $ip           = $_SERVER['REMOTE_ADDR'];                    // The IP of the client calling the script.
 //$ip         = $_SERVER['HTTP_CF_CONNECTING_IP'];          // Replace the above line with this one if the DDNS server is behind Cloudflare
@@ -181,3 +181,4 @@ if (!$rec_exists) {
 } else {
 	echo $ddnsAddress."/".$type." is already up to date\n";
 }
+?>
